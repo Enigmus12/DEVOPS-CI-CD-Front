@@ -11,6 +11,7 @@ function ConsultarDisponibilidad() {
     fetch("https://reservaslaboratorios-e3amapggfafca5bn.canadacentral-01.azurewebsites.net/booking-service/bookings")
       .then(response => response.json())
       .then(data => {
+        console.log("Datos recibidos:", data); // Verificar Datos con esta línea
         setBookings(data);
         setLoading(false);
       })
@@ -20,6 +21,7 @@ function ConsultarDisponibilidad() {
         setLoading(false);
       });
   }, []);
+  
 
   return (
     <div>
@@ -40,7 +42,7 @@ function ConsultarDisponibilidad() {
               <p><strong>Fecha:</strong> {booking.bookingDate}</p>
               <p><strong>Hora:</strong> {booking.bookingTime}</p>
               <p><strong>Aula:</strong> {booking.bookingClassRoom}</p>
-              <p><strong>Disponible:</strong> {booking.disable}</p>
+              <p><strong>Disponible:</strong> {booking.disable ? "Sí" : "No"}</p>
             </div>
           ))
         )}
