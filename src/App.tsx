@@ -6,7 +6,7 @@ import ReservarLaboratorio from './pages/ReservarLaboratorio';
 import CancelarReserva from './pages/CancelarReserva';
 import './styles/Global.css';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Routes>

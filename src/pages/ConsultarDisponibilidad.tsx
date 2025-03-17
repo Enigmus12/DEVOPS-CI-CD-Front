@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Header from '../components/Header';
 import BackButton from '../components/BackButton';
 
-function ConsultarDisponibilidad() {
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+interface Booking {
+  bookingId: string;
+  bookingDate: string;
+  bookingTime: string;
+  bookingClassRoom: string;
+  disable: boolean;
+}
+
+const ConsultarDisponibilidad: React.FC = () => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("https://reservaslaboratorios-e3amapggfafca5bn.canadacentral-01.azurewebsites.net/booking-service/bookings")
-      .then(response => response.json())
-      .then(data => {
-        console.log("Datos recibidos:", data); // Verificar Datos con esta línea
-        setBookings(data);
+    axios.get<Booking[]>("https://reservaslaboratorios-e3amapggfafca5bn.canadacentral-01.azurewebsites.net/booking-service/bookings")
+      .then(response => {
+        console.log("Datos recibidos:", response.data); // Verificar Datos con esta línea
+        setBookings(response.data);
         setLoading(false);
       })
       .catch(error => {
