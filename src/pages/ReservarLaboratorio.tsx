@@ -1,19 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Header from '../components/Header';
 import BackButton from '../components/BackButton';
 
-function CancelarReserva() {
-  const [bookings, setBookings] = useState([]);
-  const [selectedBooking, setSelectedBooking] = useState('');
-  const [status, setStatus] = useState('');
-  const [statusColor, setStatusColor] = useState('');
-  const [loading, setLoading] = useState(true);
+interface Booking {
+  bookingId: string;
+  bookingClassRoom: string;
+  bookingDate: string;
+  bookingTime: string;
+  disable: boolean;
+}
+
+const ReservarLaboratorio: React.FC = () => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [selectedBooking, setSelectedBooking] = useState<string>('');
+  const [status, setStatus] = useState<string>('');
+  const [statusColor, setStatusColor] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch("https://reservaslaboratorios-e3amapggfafca5bn.canadacentral-01.azurewebsites.net/booking-service/bookings")
-      .then(response => response.json())
-      .then(data => {
-        setBookings(data);
+    axios.get<Booking[]>("https://reservaslaboratorios-e3amapggfafca5bn.canadacentral-01.azurewebsites.net/booking-service/bookings")
+      .then(response => {
+        setBookings(response.data);
         setLoading(false);
       })
       .catch(error => {
@@ -22,32 +30,23 @@ function CancelarReserva() {
       });
   }, []);
 
-  const handleCancelar = () => {
+  const handleReservar = (): void => {
     if (!selectedBooking) return;
 
-    fetch(`https://reservaslaboratorios-e3amapggfafca5bn.canadacentral-01.azurewebsites.net/booking-service/bookings/cancel/${selectedBooking}`, { 
-      method: "PUT" 
-    })
+    axios.put(`https://reservaslaboratorios-e3amapggfafca5bn.canadacentral-01.azurewebsites.net/booking-service/bookings/make/${selectedBooking}`)
       .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error("❌ No hay reservas en este lab");
-        }
-      })
-      .then(() => {
-        setStatus("✅ Reserva cancelada con exito");
+        setStatus("✅ Reserva realizada con éxito.");
         setStatusColor("green");
       })
       .catch(error => {
-        setStatus(error.message);
+        setStatus(error.response?.data?.message || "❌ Ya está reservado este laboratorio.");
         setStatusColor("red");
       });
   };
 
   return (
     <div>
-      <Header title="Cancelar reserva" />
+      <Header title="Reservar laboratorio" />
       <h2>Selecciona una reserva</h2>
       
       <select 
@@ -72,9 +71,9 @@ function CancelarReserva() {
       <button 
         id="confirmarAccionBtn" 
         disabled={loading || bookings.length === 0 || !selectedBooking}
-        onClick={handleCancelar}
+        onClick={handleReservar}
       >
-        Cancelar
+        Reservar
       </button>
       
       <p 
@@ -94,4 +93,4 @@ function CancelarReserva() {
   );
 }
 
-export default CancelarReserva;
+export default ReservarLaboratorio;
