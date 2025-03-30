@@ -4,12 +4,56 @@ import Header from '../components/Header';
 import iconEscuelaIng from '../assets/icons/iconEscuelaIng.png';
 import '../styles/Login.css';
 
+
+/**
+ * Login component for the application.
+ *
+ * This component renders a login form that allows users to authenticate
+ * by providing a username and password. It includes the following features:
+ *
+ * - Input fields for username and password.
+ * - Validation logic to check if the credentials match predefined values.
+ * - Displays an error message if the credentials are incorrect.
+ * - Redirects to the home page upon successful login.
+ * - Provides a link to the registration page for users without an account.
+ *
+ * @component
+ * @returns {JSX.Element} The rendered login component.
+ *
+ * @remarks
+ * This component uses React's `useState` hook to manage form state and
+ * `useNavigate` from `react-router-dom` for navigation.
+ *
+ * @example
+ * ```tsx
+ * import Login from './Login';
+ *
+ * const App = () => {
+ *   return (
+ *     <div>
+ *       <Login />
+ *     </div>
+ *   );
+ * };
+ * ```
+ */
 const Login: React.FC = () => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
+  /**
+   * Handles the login form submission.
+   *
+   * @param e - The form event triggered on submission.
+   *
+   * This function prevents the default form submission behavior,
+   * validates the username and password, and performs the following actions:
+   * - If the username is 'admin' and the password is 'password', it sets a flag
+   *   in local storage to indicate the user is logged in and navigates to the home page.
+   * - Otherwise, it sets an error message indicating incorrect credentials.
+   */
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     

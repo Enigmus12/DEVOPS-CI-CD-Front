@@ -8,12 +8,27 @@ import Login from './pagesUsers/Login';
 import Register from './pagesUsers/Register';
 import './styles/Global.css';
 
-// Definir las props del componente con una interfaz
+
+/**
+ * Props for the ProtectedRoute component.
+ *
+ * @interface ProtectedRouteProps
+ * @property {ReactNode} children - The child components to be rendered within the protected route.
+ */
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
-// Componente para proteger rutas con tipos correctos
+/**
+ * A React functional component that acts as a protected route wrapper.
+ * It checks if the user is logged in by verifying a value in localStorage.
+ * If the user is not logged in, it redirects them to the login page.
+ * Otherwise, it renders the child components.
+ *
+ * @param {ProtectedRouteProps} props - The props for the ProtectedRoute component.
+ * @param {React.ReactNode} props.children - The child components to render if the user is logged in.
+ * @returns {JSX.Element} - The rendered component or a redirection to the login page.
+ */
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   
@@ -24,6 +39,29 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   return <>{children}</>;
 };
 
+/**
+ * The main application component that defines the routing structure for the app.
+ * 
+ * This component uses React Router to define both public and protected routes.
+ * Protected routes are wrapped with the `ProtectedRoute` component to ensure
+ * that only authenticated users can access them.
+ * 
+ * Routes:
+ * - Public Routes:
+ *   - `/login`: Renders the `Login` component.
+ *   - `/register`: Renders the `Register` component.
+ * 
+ * - Protected Routes:
+ *   - `/`: Renders the `HomePage` component, wrapped with `ProtectedRoute`.
+ *   - `/consultar-disponibilidad`: Renders the `ConsultarDisponibilidad` component, wrapped with `ProtectedRoute`.
+ *   - `/reservar-laboratorio`: Renders the `ReservarLaboratorio` component, wrapped with `ProtectedRoute`.
+ *   - `/cancelar-reserva`: Renders the `CancelarReserva` component, wrapped with `ProtectedRoute`.
+ * 
+ * - Fallback Route:
+ *   - Any undefined route (`*`) redirects to `/login`.
+ * 
+ * @component
+ */
 const App: React.FC = () => {
   return (
     <Router>
