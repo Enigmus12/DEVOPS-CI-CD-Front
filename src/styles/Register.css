@@ -1,3 +1,10 @@
+/* 
+  .register-container:
+  - A container element styled to occupy the full width and height of the viewport.
+  - Uses a flexbox layout to arrange its children in a column direction.
+  - Centers its children horizontally.
+  - Has a light gray background color (#f5f5f5) for a clean and neutral appearance.
+*/
 .register-container {
     width: 100%;
     min-height: 100vh;
@@ -7,6 +14,17 @@
     background-color: #f5f5f5;
   }
   
+  /*
+
+    .register-form-container:
+    - A container for the registration form.
+    - Ensures responsive design with full width and a maximum width of 450px.
+    - Centers itself horizontally with auto margins and adds vertical spacing with a 40px margin.
+    - Provides padding of 30px for inner spacing.
+    - Uses a white background color for contrast and a border-radius of 8px for rounded corners.
+    - Applies a subtle box-shadow for a lifted appearance.
+    - Utilizes flexbox to arrange child elements in a column and centers them horizontally.
+  */
   .register-form-container {
     width: 100%;
     max-width: 450px;
@@ -20,21 +38,50 @@
     align-items: center;
   }
   
+  /*
+
+    Description:
+    Styles for the logo in the registration page.
+
+    .register-logo:
+    - Sets the width of the logo to 120px.
+    - Adds a margin of 20px below the logo to create spacing.
+  */
   .register-logo {
     width: 120px;
     margin-bottom: 20px;
   }
   
+  /* 
+    Description: Styles for the registration form component.
+    .register-form: Defines the width of the registration form to span 100% of its container.
+  */
   .register-form {
     width: 100%;
   }
   
+  /* 
+    Styles for the heading (h2) element within the register form:
+    - Centers the text horizontally.
+    - Adds a margin of 24px below the heading for spacing.
+    - Sets the text color to a dark gray (#333).
+  */
   .register-form h2 {
     text-align: center;
     margin-bottom: 24px;
     color: #333;
   }
   
+  /* 
+    Styles for the register button:
+    - Sets the button to take the full width of its container.
+    - Adds padding of 12px for spacing inside the button.
+    - Applies a dark blue background color (#2c3e50) and white text color for contrast.
+    - Removes the border and adds a border-radius of 4px for rounded corners.
+    - Sets the font size to 16px for readability.
+    - Changes the cursor to a pointer to indicate interactivity.
+    - Adds a smooth transition effect (0.3s) for background color changes.
+  */
   .register-button {
     width: 100%;
     padding: 12px;
@@ -47,26 +94,56 @@
     transition: background-color 0.3s;
   }
   
+  /* 
+    Description: This CSS rule applies a hover effect to elements with the class "register-button". 
+    When the user hovers over the button, the background color changes to a darker shade (#1a2530).
+  */
   .register-button:hover {
     background-color: #1a2530;
   }
   
+  /* 
+    .login-link:
+    - Adds a margin of 20px to the top of the element.
+    - Centers the text horizontally within the element.
+    - Sets the text color to a medium gray (#555).
+  */
   .login-link {
     margin-top: 20px;
     text-align: center;
     color: #555;
   }
   
+  /* 
+    Styles for the login link within the registration page.
+    - Ensures the link text has a specific color (#2c3e50) for better visibility.
+    - Removes the default underline from the link using `text-decoration: none`.
+    - Applies a medium font weight (500) to make the link text stand out.
+  */
   .login-link a {
     color: #2c3e50;
     text-decoration: none;
     font-weight: 500;
   }
   
+  /* 
+    Description: This CSS rule applies a hover effect to anchor tags within elements 
+    that have the class "login-link". When hovered, the text decoration of the link 
+    changes to underline, providing a visual cue to the user.
+  */
   .login-link a:hover {
     text-decoration: underline;
   }
   
+  /*
+    Styles for displaying error messages in a user-friendly manner:
+    - `background-color`: Sets a light red background to indicate an error.
+    - `color`: Applies a dark red text color for better contrast and emphasis.
+    - `padding`: Adds spacing inside the element for better readability.
+    - `border-radius`: Rounds the corners of the element for a softer appearance.
+    - `margin-bottom`: Adds spacing below the element to separate it from other content.
+    - `text-align`: Centers the text within the element for a balanced layout.
+  */
   .error-message {
     background-color: #ffebee;
     color: #c62828;

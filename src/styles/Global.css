@@ -1,7 +1,25 @@
+/* 
+
+  This CSS file contains global styles for the application.
+  The `body` selector is used to reset the default margin of the body element to 0,
+  ensuring consistent spacing across different browsers.
+*/
 body {
     margin: 0;
   }
   
+  /*
+
+    This CSS rule applies a pseudo-element (::before) to the <body> element to create a fixed background overlay.
+    - The `content` property is set to an empty string to create the pseudo-element.
+    - The `position: fixed` ensures the background stays in place even when scrolling.
+    - The `width` and `height` properties are set to 100% to cover the entire viewport.
+    - The `background-image` property sets the background to an image located at '../assets/img/backgroundLibrary.jpg'.
+    - The `background-position` centers the image both horizontally and vertically.
+    - The `background-size` scales the image to fill the entire viewport without repeating.
+    - The `opacity` is set to 0.4 to make the background semi-transparent.
+    - The `z-index` is set to -1 to place the pseudo-element behind other content.
+  */
   body::before {
     content: "";
     position: fixed;
@@ -14,6 +32,13 @@ body {
     z-index: -1;    
   }
   
+  /* 
+    Styles for the <header> element:
+    - Sets the display property to "flex" to enable a flexible layout.
+    - Aligns child elements to the center horizontally using "justify-content: center".
+    - Applies a green background color with 60% opacity.
+    - Sets the text color to white for better contrast against the background.
+  */
   header {
     display: flex;
     justify-content: center;
@@ -22,12 +47,26 @@ body {
     color: white;
   }
   
+  /* 
+    Description: This CSS rule styles all <h1> elements with the following properties:
+    - Sets the font family to 'Arial'.
+    - Transforms text to uppercase.
+    - Adds a letter spacing of 2px for better readability.
+  */
   h1 {
     font-family: 'Arial';
     text-transform: uppercase; 
     letter-spacing: 2px; 
   }
   
+  /* 
+    Styles for the <h2> element:
+    - Ensures the element is displayed as a block-level element.
+    - Centers the text horizontally within the element.
+    - Adds a top margin of 1 viewport width (vw) for spacing.
+    - Sets the font size to 2 viewport widths (vw) for responsive scaling.
+    - Applies a light font weight of 100 for a thin text appearance.
+  */
   h2 {
     display: block;
     text-align: center; 
@@ -36,6 +75,24 @@ body {
     font-weight: 100;
   }
   
+  /* 
+
+    Description:
+    Styles for a container that holds buttons. The container is designed to 
+    display its child elements in a vertical column layout with spacing between 
+    them. It aligns the buttons to the left and applies a top margin and left 
+    padding for positioning.
+
+    Properties:
+    - display: flex; -> Enables a flex container for flexible layout.
+    - justify-content: left; -> Aligns items to the left horizontally.
+    - flex-direction: column; -> Arranges items in a vertical column.
+    - align-items: flex-start; -> Aligns items to the start of the cross-axis.
+    - gap: 5vh; -> Adds vertical spacing between child elements.
+    - margin-top: 25vh; -> Adds top margin to position the container.
+    - padding-left: 20%; -> Adds left padding for spacing from the left edge.
+    - position: relative; -> Positions the container relative to its normal position.
+  */
   /* Botones */
   .button-container {
     display: flex;
@@ -48,6 +105,20 @@ body {
     position: relative;
   }
   
+  /* 
+
+    .btn:
+    - A reusable button style with the following properties:
+      - Width: 30% of the viewport width.
+      - Height: 10% of the viewport height.
+      - Background color: A semi-transparent green (90% opacity).
+      - Opacity: Set to 90% for the entire button.
+      - Text color: White.
+      - Font size: 1% of the viewport width.
+      - Border radius: Rounded corners with a radius of 1% of the viewport width.
+      - Cursor: Pointer to indicate interactivity.
+      - Letter spacing: 2px for better text readability.
+  */
   .btn {
     width: 30vw; 
     height: 10vh;
@@ -89,6 +160,13 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
   }
   
+  /* 
+    Styles for the <label> element:
+    - Ensures the label is displayed as a block-level element.
+    - Centers the text horizontally within its container.
+    - Adds a top margin of 1 viewport width (vw) for spacing.
+    - Sets the font size to 2 viewport widths (vw) for responsive scaling.
+  */
   label {
     display: block;
     text-align: center;
@@ -96,6 +174,19 @@ body {
     font-size: 2vw;
   }
   
+  /* 
+    Styles for the #confirmarAccionBtn element:
+    - Sets the button to be a block-level element.
+    - Specifies the width as 50% of its container.
+    - Sets the height to 8% of the viewport height (vh).
+    - Defines a font size relative to the viewport width (1.5vw).
+    - Centers the button horizontally with auto margins and adds a vertical margin of 2vw.
+    - Applies a green background color (#2e6f2e) and white text color.
+    - Removes the border and adds rounded corners with a radius of 0.8vw.
+    - Changes the cursor to a pointer to indicate interactivity.
+    - Aligns the text to the center of the button.
+    - Adds a shadow effect with 4px vertical offset, 8px blur radius, and 30% opacity.
+  */
   #confirmarAccionBtn {
     display: block;
     width: 50%;
@@ -111,15 +202,34 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
   }
   
+  /* 
+    Description: This CSS rule applies a hover effect to the element with the ID 
+    "confirmarAccionBtn". When the user hovers over the button, its background 
+    color changes to a shade of green (#45a049), providing a visual cue for 
+    interactivity.
+  */
   #confirmarAccionBtn:hover {
     background-color: #45a049;
   }
   
+  /* 
+    Styles for the #confirmarAccionBtn element when it is in a disabled state:
+    - Sets the background color to a light gray (#cccccc) to indicate the disabled state.
+    - Changes the cursor to "not-allowed" to visually signal that the button is not clickable.
+  */
   #confirmarAccionBtn:disabled {
     background-color: #cccccc;
     cursor: not-allowed;
   }
   
+  /* 
+    Styles for the #listaLaboratorios element:
+    - display: block; -> Ensures the element behaves as a block-level element.
+    - width: 50%; -> Sets the element's width to 50% of its containing element.
+    - margin: 1vw auto; -> Centers the element horizontally with auto and adds a vertical margin of 1vw.
+    - padding: 1vw; -> Adds padding of 1vw inside the element.
+    - font-size: 1vw; -> Sets the font size relative to 1% of the viewport width.
+  */
   #listaLaboratorios {
     display: block;
     width: 50%; 
@@ -128,6 +238,16 @@ body {
     font-size: 1vw;
   }
   
+  /* 
+
+    .horarios-container:
+    - A container styled to display its child elements in a flexible layout.
+    - Uses `flex` display to arrange items in a row or column.
+    - Allows wrapping of child elements to the next line with `flex-wrap: wrap`.
+    - Adds a gap of 20px between child elements for spacing.
+    - Includes 20px padding around the container for inner spacing.
+    - Centers child elements horizontally using `justify-content: center`.
+  */
   .horarios-container {
     display: flex;
     flex-wrap: wrap;
@@ -136,6 +256,15 @@ body {
     justify-content: center;
   }
   
+  /*
+    .horario-box:
+    - A styled container box with a semi-transparent white background.
+    - Includes padding for inner spacing and rounded corners for a smooth appearance.
+    - Has a minimum width of 200px and centers its text content.
+    - Applies a subtle shadow effect for depth.
+    - Uses a responsive font size (1.2vw) and bold text for emphasis.
+    - Text color is a green shade (#2e6f2e) to align with a natural theme.
+  */
   .horario-box {
     background-color: rgba(255, 255, 255, 0.9);
     padding: 15px;
@@ -148,6 +277,18 @@ body {
     color: #2e6f2e;
   }
   
+  /* 
+    Styles for the #backBtn element:
+    - Positioned absolutely within its containing element.
+    - Placed 2% of the viewport height from the top and 2% of the viewport width from the left.
+    - Background is set to none, making it transparent.
+    - Text color is set to a red shade (#d9534f).
+    - Font size is dynamically set to 3% of the viewport width.
+    - Font weight is bold for emphasis.
+    - No border is applied to the button.
+    - Cursor changes to a pointer to indicate interactivity.
+    - Text is aligned to the left within the button.
+  */
   #backBtn {
     position: absolute;
     top: 2vh;
@@ -161,6 +302,13 @@ body {
     text-align: left;
   }
   
+  /* 
+
+    Documentation:
+    The `#backBtn:hover` selector applies styles to the back button when the user hovers over it.
+    - `color: #c9302c;` changes the text color to a red shade (#c9302c) on hover.
+    - `transform: scale(1.05);` slightly enlarges the button by scaling it to 105% of its original size, creating a hover effect.
+  */
   #backBtn:hover {
     color: #c9302c;
     transform: scale(1.05);

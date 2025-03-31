@@ -3,6 +3,16 @@ import axios from 'axios';
 import Header from '../components/Header';
 import BackButton from '../components/BackButton';
 
+/**
+ * Represents a booking for a classroom.
+ * 
+ * @interface Booking
+ * @property {string} bookingId - The unique identifier for the booking.
+ * @property {string} bookingClassRoom - The name or identifier of the classroom being booked.
+ * @property {string} bookingDate - The date of the booking in string format.
+ * @property {string} bookingTime - The time of the booking in string format.
+ * @property {boolean} disable - Indicates whether the booking is disabled or inactive.
+ */
 interface Booking {
   bookingId: string;
   bookingClassRoom: string;
@@ -11,6 +21,46 @@ interface Booking {
   disable: boolean;
 }
 
+/**
+ * The `CancelarReserva` component allows users to cancel a booking from a list of available bookings.
+ * It fetches booking data from an API, displays the bookings in a dropdown menu, and provides a button
+ * to cancel the selected booking. The component also displays the status of the cancellation operation.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} The rendered CancelarReserva component.
+ *
+ * @remarks
+ * - The component uses `axios` to fetch and update booking data from the API.
+ * - The `useState` hook is used to manage the state of bookings, the selected booking, status messages, and loading state.
+ * - The `useEffect` hook is used to fetch bookings when the component is mounted.
+ *
+ * @example
+ * ```tsx
+ * import CancelarReserva from './CancelarReserva';
+ *
+ * const App: React.FC = () => {
+ *   return <CancelarReserva />;
+ * };
+ * ```
+ *
+ * @dependencies
+ * - `axios` for HTTP requests.
+ * - `Header` and `BackButton` components for UI structure.
+ *
+ * @state
+ * - `bookings` (`Booking[]`): List of bookings fetched from the API.
+ * - `selectedBooking` (`string`): The ID of the currently selected booking.
+ * - `status` (`string`): The status message displayed to the user.
+ * - `statusColor` (`string`): The color of the status message text.
+ * - `loading` (`boolean`): Indicates whether the component is loading data.
+ *
+ * @methods
+ * - `handleCancelar`: Sends a request to cancel the selected booking and updates the status message.
+ *
+ * @styles
+ * - The status message (`#estadoLab`) is styled dynamically based on the `statusColor` state.
+ */
 const CancelarReserva: React.FC = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [selectedBooking, setSelectedBooking] = useState<string>('');
@@ -30,6 +80,15 @@ const CancelarReserva: React.FC = () => {
       });
   }, []);
 
+  /**
+   * Handles the cancellation of a selected booking.
+   * 
+   * This function sends a PUT request to cancel the selected booking.
+   * If the cancellation is successful, it updates the status message and color to indicate success.
+   * If an error occurs, it updates the status message and color to indicate the error.
+   * 
+   * @returns {void} This function does not return a value.
+   */
   const handleCancelar = (): void => {
     if (!selectedBooking) return;
 
