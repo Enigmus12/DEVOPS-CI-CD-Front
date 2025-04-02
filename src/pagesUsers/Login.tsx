@@ -1,91 +1,81 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import Header from '../components/Header';
-import iconEscuelaIng from '../assets/icons/iconEscuelaIng.png';
+import { useNavigate } from 'react-router-dom';
+import { authService } from '../service/api';
 import '../styles/Login.css';
-
+import iconEscuelaIng from '../assets/icons/iconEscuelaIng.png';
 
 /**
- * Login component for the application.
- *
- * This component renders a login form that allows users to authenticate
- * by providing a username and password. It includes the following features:
- *
- * - Input fields for username and password.
- * - Validation logic to check if the credentials match predefined values.
- * - Displays an error message if the credentials are incorrect.
- * - Redirects to the home page upon successful login.
- * - Provides a link to the registration page for users without an account.
- *
- * @component
- * @returns {JSX.Element} The rendered login component.
- *
- * @remarks
- * This component uses React's `useState` hook to manage form state and
- * `useNavigate` from `react-router-dom` for navigation.
- *
- * @example
- * ```tsx
- * import Login from './Login';
- *
- * const App = () => {
- *   return (
- *     <div>
- *       <Login />
- *     </div>
- *   );
- * };
- * ```
+ * Login component for user authentication.
+ * Allows users to log in using their user ID and password.
+ * @returns {JSX.Element} Login component.
  */
-const Login: React.FC = () => {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const navigate = useNavigate();
+interface LoginResponse {
+  authenticated: boolean;
+  token: string;
+  user: {
+    userId: string;
+  };
+  message?: string;
+}
 
-  /**
-   * Handles the login form submission.
-   *
-   * @param e - The form event triggered on submission.
-   *
-   * This function prevents the default form submission behavior,
-   * validates the username and password, and performs the following actions:
-   * - If the username is 'admin' and the password is 'password', it sets a flag
-   *   in local storage to indicate the user is logged in and navigates to the home page.
-   * - Otherwise, it sets an error message indicating incorrect credentials.
-   */
-  const handleLogin = (e: React.FormEvent) => {
+const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Lógica de validación
-    if (username === 'admin' && password === 'password') {
-      localStorage.setItem('isLoggedIn', 'true');
-      navigate('/');
-    } else {
-      setError('Usuario o contraseña incorrectos');
+    if (!userId || !password) {
+      setError('Por favor ingrese todos los campos');
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      setError('');
+      
+      const response = await authService.login({ userId, password }) as LoginResponse;
+      
+      if (response.authenticated) {
+        // Guardar token y estado de autenticación
+        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userId', response.user.userId);
+        
+        // Redirigir al home
+        navigate('/');
+      } else {
+        setError(response.message || 'Credenciales inválidas');
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al iniciar sesión');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <Header title="Inicio de Sesión - Reservas ECI" />
-      
-      <div className="login-form-container">
-        <img src={iconEscuelaIng} alt="Icono Escuela de Ingeniería" className="login-logo" />
+    <div className="auth-container">
+      <div className="auth-card">
+        <img src={iconEscuelaIng} alt="Logo ECI" className="auth-logo" />
+        <h2>Iniciar Sesión</h2>
         
-        <form className="login-form" onSubmit={handleLogin}>
-          <h2>Iniciar Sesión</h2>
-          
-          {error && <div className="error-message">{error}</div>}
-          
+        {error && <div className="error-message">{error}</div>}
+        
+        <form onSubmit={handleLogin}>
           <div className="form-group">
-            <label htmlFor="username">Usuario</label>
+            <label htmlFor="userId">ID de Usuario</label>
             <input
               type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
+              id="userId"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+              placeholder="Ingrese su ID de usuario"
+              disabled={loading}
             />
           </div>
           
@@ -96,19 +86,22 @@ const Login: React.FC = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              required
+              placeholder="Ingrese su contraseña"
+              disabled={loading}
             />
           </div>
           
-          <button type="submit" className="login-button">Ingresar</button>
-          
-          <div className="register-link">
-            ¿No tienes una cuenta? <Link to="/register">Crear cuenta</Link>
-          </div>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Cargando...' : 'Iniciar Sesión'}
+          </button>
         </form>
+        
+        <p className="auth-link">
+          ¿No tienes cuenta? <span onClick={() => navigate('/register')}>Regístrate</span>
+        </p>
       </div>
     </div>
   );
-}
+};
 
 export default Login;

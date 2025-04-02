@@ -2,25 +2,25 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { bookingService } from '../service/api';
 import Header from '../components/Header';
-import '../styles/ReservarLaboratorio.css';
+import '../styles/ConsultarMisReservas.css';
 
 
 /**
- * Component for reserving laboratories.
- * Allows users to filter available laboratories by date, classroom, and priority.
- * Users can make reservations directly from the list of available laboratories.
- * @returns {JSX.Element} Reservation component.
+ * Component for consulting user reservations.
+ * Allows users to view, filter, and cancel their existing laboratory reservations.
+ * @returns {JSX.Element} Reservations consultation component.
  */
 interface Booking {
   bookingId: string;
   bookingDate: string;
+  bookingTime: string;
   disable: boolean;
   bookingClassRoom: string;
   priority: number;
-  reservedBy: string | null;
+  reservedBy: string;
 }
 
-const ReservarLaboratorio: React.FC = () => {
+const ConsultarMisReservas: React.FC = () => {
   const navigate = useNavigate();
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,29 +32,32 @@ const ReservarLaboratorio: React.FC = () => {
   });
   
   useEffect(() => {
-    fetchBookings();
+    fetchMyReservations();
   }, []);
   
-  const handleLogoutmenu = () => {
+  const handleLogoutMenu = () => {
     navigate('/');
   };
-  
-  const fetchBookings = async () => {
+
+  const fetchMyReservations = async () => {
     try {
       setLoading(true);
-      const data = await bookingService.getAllBookings() as Booking[];
-      
-      // Filtramos solo los disponibles (disable = true)
-      const availableBookings = data.filter((booking: Booking) => booking.disable);
-      setBookings(availableBookings);
+      const data = await bookingService.getMyReservations() as Booking[];
+      setBookings(data);
     } catch (err: any) {
-      setError('Error al cargar las reservas disponibles');
-      console.error(err);
+      if (err.response?.status === 401) {
+        alert('Su sesión ha expirado. Por favor, inicie sesión nuevamente.');
+        localStorage.clear();
+        navigate('/login');
+      } else {
+        setError('Error al cargar sus reservas');
+        console.error(err);
+      }
     } finally {
       setLoading(false);
     }
   };
-  
+
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFilter(prev => ({
@@ -62,7 +65,7 @@ const ReservarLaboratorio: React.FC = () => {
       [name]: value
     }));
   };
-  
+
   const filteredBookings = bookings.filter(booking => {
     const dateMatch = filter.date ? booking.bookingDate === filter.date : true;
     const classroomMatch = filter.classroom 
@@ -74,26 +77,28 @@ const ReservarLaboratorio: React.FC = () => {
     return dateMatch && classroomMatch && priorityMatch;
   });
   
-  const handleMakeReservation = async (bookingId: string) => {
+  const handleCancelReservation = async (bookingId: string) => {
     try {
-      if (window.confirm('¿Está seguro de realizar esta reserva?')) {
-        await bookingService.makeReservation(bookingId);
-        alert('Reserva realizada con éxito');
-        fetchBookings(); // Recargar la lista sin redirigir
+      if (window.confirm('¿Está seguro de cancelar esta reserva?')) {
+        await bookingService.cancelReservation(bookingId);
+        alert('Reserva cancelada con éxito');
+        fetchMyReservations(); // Actualizar lista
       }
     } catch (err: any) {
-      alert(err.response?.data?.message || 'Error al realizar la reserva');
+      alert(err.response?.data?.message || 'Error al cancelar la reserva');
     }
   };
 
   return (
     <div>
-      <Header title="Reservar Laboratorio" />
-      <button className="btn-logmenu" onClick={handleLogoutmenu}>
+      <Header title="Mis Reservas" />
+
+      <button className="btn-logmenu" onClick={handleLogoutMenu}>
         Volver al menu
       </button>
+      
       <div className="container">
-        <div className="filter-container">
+      <div className="filter-container">
           <div className="filter-group">
             <label htmlFor="date">Fecha:</label>
             <input
@@ -130,51 +135,49 @@ const ReservarLaboratorio: React.FC = () => {
             />
           </div>
         </div>
-        
         {error && <div className="error-message">{error}</div>}
         
         {loading ? (
-          <p className="loading">Cargando disponibilidad...</p>
+          <p className="loading">Cargando sus reservas...</p>
         ) : (
           <div className="bookings-table">
-            {filteredBookings.length === 0 ? (
-              <p className="no-bookings">No hay laboratorios disponibles con esos criterios</p>
+            {bookings.length === 0 ? (
+              <p className="no-bookings">No tiene reservas activas</p>
             ) : (
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Laboratorio</th> 
-                      <th>Fecha</th>
-                      <th>Salon</th>
-                      <th>Prioridad</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredBookings.map(booking => (
-                      <tr key={booking.bookingId}>
-                        <td>{booking.bookingId}</td>
-                        <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
-                        <td>{booking.bookingClassRoom}</td>
-                        <td>{booking.priority}</td>
-                        <td>
-                          <button 
-                            className="btn btn-small btn-primary"
-                            onClick={() => handleMakeReservation(booking.bookingId)}
-                          >
-                            Reservar
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <table>
+              <thead>
+                <tr>
+                  <th>Laboratorio</th> 
+                  <th>Fecha</th>
+                  <th>Salon</th>
+                  <th>Prioridad</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredBookings.map(booking => (
+                  <tr key={booking.bookingId}>
+                    <td>{booking.bookingId}</td>
+                    <td>{new Date(booking.bookingDate).toLocaleDateString()}</td>
+                    <td>{booking.bookingClassRoom}</td>
+                    <td>{booking.priority}</td>
+                    <td>
+                      <button 
+                        className="btn btn-small btn-primary"
+                        onClick={() => handleCancelReservation(booking.bookingId)}
+                      >
+                        Cancelar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
             )}
           </div>
         )}
-        
       </div>
     </div>
   );
 };
 
-export default ReservarLaboratorio;
+export default ConsultarMisReservas;
