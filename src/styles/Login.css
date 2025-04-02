@@ -1,146 +1,55 @@
-/* 
-
-Description:
-This CSS file styles the login page, including the container, form, buttons, and error messages. 
-It provides a clean and responsive design for the login interface.
-
-Styles:
-- .login-container: Defines the main container for the login page with full width and height, 
-  centered content, and a light background color.
-- .login-form-container: Styles the form container with a maximum width, padding, white background, 
-  rounded corners, and a subtle shadow for a card-like appearance.
-- .login-logo: Sets the size and spacing for the logo displayed above the form.
-- .login-form: Ensures the form takes up the full width of its container.
-- .login-form h2: Styles the form heading with centered text and a dark color.
-- .form-group: Adds spacing between form fields.
-- .form-group label: Styles the labels with bold text and spacing.
-- .form-group input: Styles the input fields with padding, border, and rounded corners.
-- .login-button: Styles the login button with a dark background, white text, rounded corners, 
-  and a hover effect for interactivity.
-- .register-link: Styles the registration link with centered text and a hover effect for the link.
-- .error-message: Styles error messages with a red background, bold text, padding, and rounded corners 
-  for visibility and emphasis.
-*/
-.login-container {
+.auth-container {
   width: 100%;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   background-color: #f5f5f5;
 }
 
-/* 
-  Styles for the login form container:
-  - Sets the container to take full width with a maximum width of 450px.
-  - Centers the container horizontally with auto margins.
-  - Adds padding of 30px for inner spacing.
-  - Applies a white background color for the container.
-  - Rounds the corners with an 8px border radius.
-  - Adds a subtle shadow for a lifted appearance.
-  - Uses flexbox to arrange child elements in a column and center-align them.
-*/
-.login-form-container {
+.auth-card {
   width: 100%;
-  max-width: 450px;
-  margin: 40px auto;
+  max-width: 400px;
   padding: 30px;
   background-color: white;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  text-align: center;
 }
 
-/* 
-  Styles for the login logo:
-  - Sets the width of the logo to 120px.
-  - Adds a margin of 20px to the bottom of the logo for spacing.
-*/
-.login-logo {
-  width: 120px;
+.auth-logo {
+  width: 100px;
   margin-bottom: 20px;
 }
 
-/* 
- * Styles for the login form container.
- * - Ensures the form takes up the full width of its parent container.
- * 
- */
-.login-form {
-  width: 100%;
-}
-
-/* 
-  Styles for the heading (h2) inside the login form:
-  - Centers the text horizontally.
-  - Adds a margin of 24px below the heading.
-  - Sets the text color to a dark gray (#333).
-*/
-.login-form h2 {
-  text-align: center;
-  margin-bottom: 24px;
+h2 {
+  margin-bottom: 20px;
   color: #333;
 }
 
-/* 
- * Styles for the form group container.
- * This class is used to apply spacing between form elements.
- * - `margin-bottom`: Adds a 20px space below each form group.
- */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
-/* 
-  Styles for the label element inside a form group:
-  - Ensures the label is displayed as a block element.
-  - Adds spacing below the label with a margin of 8px.
-  - Sets the font weight to 500 for a medium-bold appearance.
-  - Applies a text color of #555 for a subtle gray tone.
-*/
 .form-group label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
   font-weight: 500;
   color: #555;
 }
 
-/* 
-  Styles for input elements within a form group:
-  - Sets the width to occupy 100% of the parent container.
-  - Adds padding of 12px for spacing inside the input field.
-  - Applies a 1px solid border with a light gray color (#ddd).
-  - Rounds the corners of the input field with a 4px border radius.
-  - Sets the font size of the text inside the input field to 16px.
-*/
 .form-group input {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
 }
 
-/* 
-  .login-button:
-  This class styles a button typically used for login functionality.
-
-  Properties:
-  - width: Sets the button's width to occupy 100% of its container.
-  - padding: Adds 12px of padding inside the button for spacing.
-  - background-color: Sets the button's background color to a dark shade (#2c3e50).
-  - color: Sets the text color to white for contrast.
-  - border: Removes any default border styling.
-  - border-radius: Rounds the corners of the button with a 4px radius.
-  - font-size: Sets the font size of the button text to 16px.
-  - cursor: Changes the cursor to a pointer when hovering over the button.
-  - transition: Adds a smooth transition effect (0.3s) for background-color changes.
-*/
-.login-button {
+.btn-primary {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
   background-color: #2c3e50;
   color: white;
   border: none;
@@ -150,63 +59,30 @@ Styles:
   transition: background-color 0.3s;
 }
 
-/* 
- * 
- * This CSS rule applies a hover effect to elements with the class "login-button".
- * When the user hovers over the button, the background color changes to a darker shade (#1a2530),
- * providing a visual cue for interactivity.
- */
-.login-button:hover {
+.btn-primary:hover {
   background-color: #1a2530;
 }
 
-/* 
-  Styles for the "register-link" class:
-  - Adds a top margin of 20px to create spacing above the element.
-  - Centers the text horizontally within its container.
-  - Sets the text color to a medium gray (#555) for a subtle appearance.
-*/
-.register-link {
-  margin-top: 20px;
-  text-align: center;
+.auth-link {
+  margin-top: 15px;
   color: #555;
 }
 
-/* 
-  Styles for the anchor tag within the .register-link class:
-  - Sets the text color to a dark shade (#2c3e50).
-  - Removes the underline from the text (no text decoration).
-  - Applies a medium font weight (500) for better emphasis.
-*/
-.register-link a {
+.auth-link span {
   color: #2c3e50;
-  text-decoration: none;
+  cursor: pointer;
   font-weight: 500;
 }
 
-/* 
-  Styles for the hover effect on links within the .register-link class.
-  When the user hovers over the link, an underline is applied to the text
-  to indicate interactivity.
-*/
-.register-link a:hover {
+.auth-link span:hover {
   text-decoration: underline;
 }
 
-/* 
-  Styles for the error message component:
-  - background-color: Sets a light red background to indicate an error.
-  - color: Sets the text color to a darker red for better contrast and emphasis.
-  - padding: Adds spacing inside the error message box for better readability.
-  - border-radius: Rounds the corners of the error message box for a softer appearance.
-  - margin-bottom: Adds spacing below the error message to separate it from other elements.
-  - text-align: Centers the text within the error message box.
-*/
 .error-message {
   background-color: #ffebee;
   color: #c62828;
   padding: 10px;
   border-radius: 4px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   text-align: center;
 }

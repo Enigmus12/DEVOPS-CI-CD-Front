@@ -1,97 +1,83 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import Header from '../components/Header';
-import iconEscuelaIng from '../assets/icons/iconEscuelaIng.png';
+import { useNavigate } from 'react-router-dom';
+import { authService } from '../service/api';
 import '../styles/Register.css';
+import iconEscuelaIng from '../assets/icons/iconEscuelaIng.png';
 
 /**
- * Register Component
- * 
- * This component renders a user registration form for the "Reservas ECI" application.
- * It allows users to create an account by providing a username, email, password, 
- * and confirming the password. The component includes validation to ensure that 
- * the password and confirm password fields match.
- * 
- * State Variables:
- * - `username`: Stores the username entered by the user.
- * - `email`: Stores the email address entered by the user.
- * - `password`: Stores the password entered by the user.
- * - `confirmPassword`: Stores the confirmation password entered by the user.
- * - `error`: Stores an error message if the passwords do not match.
- * 
- * Functions:
- * - `handleRegister`: Handles the form submission, validates the input, and 
- *   navigates the user to the login page upon successful registration.
- * 
- * Features:
- * - Displays an error message if the passwords do not match.
- * - Logs the registration details to the console (for demonstration purposes).
- * - Shows a success alert upon successful registration.
- * - Navigates the user to the login page after registration.
- * 
- * UI Elements:
- * - A form with input fields for username, email, password, and confirm password.
- * - A submit button to create the account.
- * - A link to navigate to the login page if the user already has an account.
- * 
- * Dependencies:
- * - `useState` and `useNavigate` hooks from React.
- * - `Link` component for navigation.
- * - `Header` component for displaying the page title.
- * - `iconEscuelaIng` for displaying the logo.
+ * User reservations consultation component.
+ * Allows users to view, filter, and cancel their existing laboratory reservations.
+ * @returns {JSX.Element} Reservations consultation component.
  */
-const Register: React.FC = () => {
-  const [username, setUsername] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [error, setError] = useState<string>('');
-  const navigate = useNavigate();
 
-  /**
-   * Handles the registration process when the form is submitted.
-   * 
-   * @param e - The form submission event.
-   * 
-   * This function prevents the default form submission behavior, checks if the 
-   * password and confirmPassword fields match, and sets an error message if they do not.
-   * If the passwords match, it logs the user registration details, displays a success 
-   * alert, and navigates the user to the login page.
-   */
-  const handleRegister = (e: React.FormEvent) => {
+const Register: React.FC = () => {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    userId: '',
+    email: '',
+    password: '',
+    passwordConfirmation: ''
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (password !== confirmPassword) {
+    // Validaciones básicas
+    if (!formData.userId || !formData.email || !formData.password || !formData.passwordConfirmation) {
+      setError('Por favor complete todos los campos');
+      return;
+    }
+    
+    if (formData.password !== formData.passwordConfirmation) {
       setError('Las contraseñas no coinciden');
       return;
     }
     
-    console.log('Usuario registrado:', { username, email, password });
-    
-    alert('Cuenta creada con éxito. Por favor inicia sesión.');
-    navigate('/login');
+    try {
+      setLoading(true);
+      setError('');
+      
+      const response = await authService.register(formData);
+      
+      // Registro exitoso
+      alert('Registro exitoso. Ahora puede iniciar sesión.');
+      navigate('/login');
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al registrar usuario');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="register-container">
-      <Header title="Registro - Reservas ECI" />
-      
-      <div className="register-form-container">
-        <img src={iconEscuelaIng} alt="Icono Escuela de Ingeniería" className="register-logo" />
+    <div className="auth-container">
+      <div className="auth-card">
+        <img src={iconEscuelaIng} alt="Logo ECI" className="auth-logo" />
+        <h2>Registro de Usuario</h2>
         
-        <form className="register-form" onSubmit={handleRegister}>
-          <h2>Crear Cuenta</h2>
-          
-          {error && <div className="error-message">{error}</div>}
-          
+        {error && <div className="error-message">{error}</div>}
+        
+        <form onSubmit={handleRegister}>
           <div className="form-group">
-            <label htmlFor="username">Usuario</label>
+            <label htmlFor="userId">ID de Usuario</label>
             <input
               type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
+              id="userId"
+              name="userId"
+              value={formData.userId}
+              onChange={handleChange}
+              placeholder="Ingrese su usuario"
+              disabled={loading}
             />
           </div>
           
@@ -100,9 +86,11 @@ const Register: React.FC = () => {
             <input
               type="email"
               id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Ingrese su correo electrónico"
+              disabled={loading}
             />
           </div>
           
@@ -111,32 +99,38 @@ const Register: React.FC = () => {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Ingrese su contraseña"
+              disabled={loading}
             />
           </div>
           
           <div className="form-group">
-            <label htmlFor="confirmPassword">Confirmar Contraseña</label>
+            <label htmlFor="passwordConfirmation">Confirmar Contraseña</label>
             <input
               type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
+              id="passwordConfirmation"
+              name="passwordConfirmation"
+              value={formData.passwordConfirmation}
+              onChange={handleChange}
+              placeholder="Confirme su contraseña"
+              disabled={loading}
             />
           </div>
           
-          <button type="submit" className="register-button">Crear Cuenta</button>
-          
-          <div className="login-link">
-            ¿Ya tienes una cuenta? <Link to="/login">Iniciar sesión</Link>
-          </div>
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? 'Registrando...' : 'Registrarse'}
+          </button>
         </form>
+        
+        <p className="auth-link">
+          ¿Ya tienes cuenta? <span onClick={() => navigate('/login')}>Inicia Sesión</span>
+        </p>
       </div>
     </div>
   );
-}
+};
 
 export default Register;
