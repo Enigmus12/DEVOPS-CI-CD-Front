@@ -41,11 +41,12 @@ const ConsultarMisReservas: React.FC = () => {
       const data = await bookingService.getMyReservations() as Booking[];
       setBookings(data);
     } catch (err: any) {
-      // rest of your error handling code
+      // Utilizamos setError para establecer un mensaje de error
+      setError(err.response?.data?.message || 'Error al cargar las reservas');
     } finally {
       setLoading(false);
     }
-  }, [navigate]); // Add navigate as a dependency
+  }, []); // Eliminamos navigate como dependencia
   
   useEffect(() => {
     fetchMyReservations();
@@ -78,6 +79,7 @@ const ConsultarMisReservas: React.FC = () => {
         fetchMyReservations(); // Actualizar lista
       }
     } catch (err: any) {
+      setError(err.response?.data?.message || 'Error al cancelar la reserva');
       alert(err.response?.data?.message || 'Error al cancelar la reserva');
     }
   };
