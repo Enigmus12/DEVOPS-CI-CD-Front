@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { bookingService } from '../service/api';
 import Header from '../components/Header';
@@ -31,14 +31,19 @@ const ReservarLaboratorio: React.FC = () => {
     priority: ''
   });
   
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+  
   const handleLogoutmenu = () => {
     navigate('/');
   };
   
-  const fetchBookings = useCallback (async () => {
+  const fetchBookings = async () => {
     try {
       setLoading(true);
       const data = await bookingService.getAllBookings() as Booking[];
+      
       // Filtramos solo los disponibles (disable = true)
       const availableBookings = data.filter((booking: Booking) => booking.disable);
       setBookings(availableBookings);
@@ -48,11 +53,7 @@ const ReservarLaboratorio: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [navigate]);
-
-  useEffect(() => {
-    fetchBookings();
-  }, [fetchBookings]);
+  };
   
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
