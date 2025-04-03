@@ -6,6 +6,10 @@ import ReservarLaboratorio from './pagesBookings/ReservarLaboratorio';
 import Login from './pagesUsers/Login';
 import Register from './pagesUsers/Register';
 import './styles/Global.css';
+import GenerarLaboratorios from './pagesAdmin/GenerarLaboratorios';
+import HomePageAdmin from './pagesAdmin/HomePageAdmin'
+import ConsultarReservas from 'pagesAdmin/ConsultarReservas';
+import EliminarLaboratorios from 'pagesAdmin/EliminarLaboratorios';
 
 /**
  * ProtectedRoute component to guard routes that require authentication.
@@ -52,6 +56,31 @@ const App: React.FC = () => {
         <Route path="/reservar-laboratorio" element={
           <ProtectedRoute>
             <ReservarLaboratorio />
+          </ProtectedRoute>
+        } />
+
+        {/* Rutas protegidas para el admin*/}
+        <Route path="/admin" element={
+          <ProtectedRoute>
+            <HomePageAdmin />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/generar-laboratorios" element={
+          <ProtectedRoute>
+            <GenerarLaboratorios />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/eliminar-laboratorios" element={
+          <ProtectedRoute>
+            <EliminarLaboratorios />
+          </ProtectedRoute>
+        } />        
+
+        <Route path="/consultar-reservas" element={
+          <ProtectedRoute>
+            <ConsultarReservas />
           </ProtectedRoute>
         } />
         
