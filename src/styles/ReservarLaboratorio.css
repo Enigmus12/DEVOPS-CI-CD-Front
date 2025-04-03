@@ -1,0 +1,41 @@
+ 
+  /* Filtros */
+  .filter-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  
+  .filter-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filter-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .filter-group input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+
+  /* Boton */
+  .btn-logmenu {
+    position: absolute;
+    top: 2vh;
+    right: 2vw;
+    background-color: blue;
+    color: white;
+    font-size: 0.8vw;
+    padding: 0.5vh 1vw;
+    border-radius: 0.5vw;
+    cursor: pointer;
+  }
+  
+  .btn-logmwnu:hover {
+    background-color: darkred;
+  }
+  
