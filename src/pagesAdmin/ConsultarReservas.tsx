@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header';
 import { bookingService } from '../service/api';
 import '../styles/ConsultarReservas.css';
 interface Booking {
