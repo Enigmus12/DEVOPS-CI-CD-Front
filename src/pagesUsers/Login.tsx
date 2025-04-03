@@ -39,15 +39,18 @@ const Login: React.FC = () => {
       setError('');
       
       const response = await authService.login({ userId, password }) as LoginResponse;
-      
+    
       if (response.authenticated) {
-        // Guardar token y estado de autenticación
         localStorage.setItem('authToken', response.token);
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userId', response.user.userId);
         
-        // Redirigir al home
-        navigate('/');
+        // Redirección basada en el usuario
+        if (response.user.userId === 'Admin') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
       } else {
         setError(response.message || 'Credenciales inválidas');
       }

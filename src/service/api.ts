@@ -34,6 +34,14 @@ api.interceptors.request.use(
   }
 );
 
+// Servicios para generar y limpiar bookings
+export const bookingGenerateService = {
+  generateBookings: async (min = 100, max = 1000) => {
+    const response = await api.post(`/generate-service/generate-bookings?min=${min}&max=${max}`);
+    return response.data;
+  },
+};
+
 // Servicios para autenticación y usuarios
 export const authService = {
   login: async (credentials: { userId: string; password: string }) => {
