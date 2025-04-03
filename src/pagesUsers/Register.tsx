@@ -47,7 +47,7 @@ const Register: React.FC = () => {
       setLoading(true);
       setError('');
       
-      const response = await authService.register(formData);
+      await authService.register(formData);
       
       // Registro exitoso
       alert('Registro exitoso. Ahora puede iniciar sesión.');
